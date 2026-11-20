@@ -46,7 +46,6 @@ def run(args, events_path, latencies_path):
     message = "x" * args.size
     run_id = uuid4().hex
     mode = "concurrent" if args.concurrent else "sequential"
-    barrier = Barrier(len(ROUTES), timeout=10) if args.concurrent else None
 
     with ExitStack() as stack:
         for name, node in nodes.items():
@@ -65,7 +64,7 @@ def run(args, events_path, latencies_path):
             connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
             connections[sender] = connection
 
-        def send_one(index, route):
+        def send_one(index, route, barrier=None):
             sender, peer = route
             if barrier is not None:
                 barrier.wait()
@@ -75,14 +74,16 @@ def run(args, events_path, latencies_path):
             )
 
         started = perf_counter()
-        if barrier is None:
+        if not args.concurrent:
             rows = [send_one(i, ROUTES[i % len(ROUTES)]) for i in range(args.count)]
         else:
             rows = []
             with ThreadPoolExecutor(max_workers=len(ROUTES)) as pool:
                 for offset in range(0, args.count, len(ROUTES)):
-                    jobs = [pool.submit(send_one, offset + i, route)
-                            for i, route in enumerate(ROUTES)]
+                    batch = ROUTES[:args.count - offset]
+                    barrier = Barrier(len(batch), timeout=10)
+                    jobs = [pool.submit(send_one, offset + i, route, barrier)
+                            for i, route in enumerate(batch)]
                     rows.extend(job.result() for job in jobs)
         elapsed = perf_counter() - started
 
@@ -102,8 +103,8 @@ def main():
     parser.add_argument("--concurrent", action="store_true")
     parser.add_argument("--output", type=Path, required=True, help="Prefijo de los archivos CSV")
     args = parser.parse_args()
-    if args.count < 1 or (args.concurrent and args.count % len(ROUTES)):
-        parser.error("Use un conteo positivo y múltiplo de tres en modo concurrente")
+    if args.count < 1:
+        parser.error("Use un conteo positivo")
     events = args.output.with_name(f"{args.output.name}_eventos.csv")
     latencies = args.output.with_name(f"{args.output.name}_latencias.csv")
     if events.exists() or latencies.exists():

@@ -6,15 +6,17 @@ Esta es mi implementación de sockets TCP para la práctica experimental de la U
 
 ## Ejecución
 
+En la interfaz local usamos los puertos TCP del enunciado. El nodo A escucha en `5000`, el nodo B en `5001` y el nodo C en `5002`.
+
 Desde la raíz del repositorio, con Python 3.11 o superior y la biblioteca estándar:
 
 ```powershell
 python src/sockets/client.py --output data/demo_tcp_100b
 python src/sockets/client.py --size 10240 --output data/demo_tcp_10kib
-python src/sockets/client.py --size 10240 --count 21 --concurrent --output data/demo_tcp_concurrente
+python src/sockets/client.py --size 10240 --count 100 --concurrent --output data/demo_tcp_concurrente
 ```
 
-Los comandos abren tres servidores en la interfaz local y guardan dos CSV por corrida. Para repetir una ejecución use otro prefijo, porque el programa protege los archivos originales. Para las corridas de 100 intercambios, añada `--count 100` y use un prefijo distinto para cada repetición y para el calentamiento. En modo concurrente el conteo debe ser múltiplo de tres. Para la captura propia, ejecute el primer comando en su terminal y capture la salida que muestra los tres puertos, los 20 intercambios y los archivos producidos.
+Los comandos abren tres servidores en la interfaz local y guardan dos CSV por corrida. Para repetir una ejecución use otro prefijo, porque el programa protege los archivos originales. Para las corridas de 100 intercambios, añada `--count 100` y use un prefijo distinto para cada repetición y para el calentamiento. En modo concurrente, arrancamos hasta tres solicitudes por grupo. Con 100 intercambios ejecutamos 33 grupos de tres y un intercambio final. Para la captura propia, ejecute el primer comando en su terminal y capture la salida que muestra los tres puertos, los 20 intercambios y los archivos producidos.
 
 ## Formato de intercambio y CSV
 

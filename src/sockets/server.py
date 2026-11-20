@@ -10,7 +10,7 @@ from pathlib import Path
 from socketserver import BaseRequestHandler, ThreadingTCPServer
 from threading import Lock
 
-PORTS = {"nodo-A": 5101, "nodo-B": 5102, "nodo-C": 5103}
+PORTS = {"nodo-A": 5000, "nodo-B": 5001, "nodo-C": 5002}
 EVENT_FIELDS = (
     "run_id", "message_id", "node", "peer", "event", "clock",
     "wall_time_utc", "kind", "payload_bytes",
