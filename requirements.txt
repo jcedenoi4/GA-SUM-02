@@ -5,5 +5,8 @@ grpcio==1.85.3
 grpcio-tools==1.85.3
 protobuf==7.36.2
 
-# Análisis de resultados: Darwin fija aquí las versiones exactas de pandas y
-# matplotlib que use para generar las tablas y los gráficos.
+# Análisis de resultados (analysis/). Versiones instaladas por Darwin y
+# probadas con Python 3.12.10 en Windows 11:
+pandas==3.1.1
+matplotlib==3.11.2
+numpy==2.5.5
