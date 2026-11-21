@@ -5,7 +5,9 @@ Qué hace:
      run_id, message_id, node, peer, event, clock y kind).
   2. Empareja cada envío (send) con su recepción (receive).
   3. Comprueba que, en cada mensaje, el reloj al recibir sea mayor que al enviar.
-  4. Guarda los resultados en analysis/resultados/ (CSV).
+  4. Reconstruye la relación "ocurrió antes" (->) entre eventos y busca eventos
+     de nodos distintos con el MISMO reloj que son concurrentes.
+  5. Guarda los resultados en analysis/resultados/ (CSV y tablas .tex).
 
 Uso (desde la raíz del repositorio):
     python analysis/verificar_lamport.py
@@ -14,7 +16,7 @@ Uso (desde la raíz del repositorio):
 
 import re
 import sys
-from collections import defaultdict
+from collections import defaultdict, deque
 from pathlib import Path
 
 import pandas as pd
@@ -77,6 +79,109 @@ def verificar_mensajes(pares: pd.DataFrame) -> pd.DataFrame:
     return pares
 
 
+# ---------------------------------------------------------------------------
+# Paso 4: relación "ocurrió antes" y eventos concurrentes
+# ---------------------------------------------------------------------------
+def construir_grafo(eventos: pd.DataFrame, pares: pd.DataFrame) -> dict[int, list[int]]:
+    """Grafo de la relación 'ocurrió antes' (Lamport, 1978):
+      - dentro de un mismo nodo, cada evento va antes que el siguiente
+        (se ordenan por reloj, que en un nodo siempre crece);
+      - un envío va antes que la recepción del mismo mensaje.
+    """
+    siguientes = defaultdict(list)
+    for _, eventos_nodo in eventos.groupby("node"):
+        orden = eventos_nodo.sort_values("clock").index.tolist()
+        for anterior, posterior in zip(orden, orden[1:]):
+            siguientes[anterior].append(posterior)
+    for _, par in pares.iterrows():
+        siguientes[par["id_env"]].append(par["id_rec"])
+    return siguientes
+
+
+def alcanzables(grafo: dict[int, list[int]], inicio: int) -> set[int]:
+    """Todos los eventos a los que se llega desde 'inicio' (búsqueda en anchura)."""
+    vistos, cola = set(), deque([inicio])
+    while cola:
+        actual = cola.popleft()
+        for vecino in grafo.get(actual, []):
+            if vecino not in vistos:
+                vistos.add(vecino)
+                cola.append(vecino)
+    return vistos
+
+
+def buscar_concurrentes(eventos: pd.DataFrame, grafo) -> tuple[pd.DataFrame, int, int]:
+    """Devuelve:
+      - pares de eventos de nodos distintos con el mismo reloj, indicando si son
+        concurrentes (ninguno ocurrió antes que el otro);
+      - cuántos pares con reloj distinto son, aun así, concurrentes
+        (prueba de que un reloj menor NO implica que un evento causó al otro);
+      - cuántos pares de eventos se revisaron en total.
+    """
+    despues_de = {i: alcanzables(grafo, i) for i in eventos.index}
+
+    def concurrentes(a, b):
+        return b not in despues_de[a] and a not in despues_de[b]
+
+    filas = []
+    for reloj, grupo in eventos.groupby("clock"):
+        ids = grupo.index.tolist()
+        for i, a in enumerate(ids):
+            for b in ids[i + 1:]:
+                if eventos.at[a, "node"] == eventos.at[b, "node"]:
+                    continue
+                filas.append({
+                    "clock": reloj,
+                    "nodo_1": eventos.at[a, "node"], "evento_1": eventos.at[a, "event"],
+                    "mensaje_1": eventos.at[a, "message_id"], "tipo_1": eventos.at[a, "kind"],
+                    "nodo_2": eventos.at[b, "node"], "evento_2": eventos.at[b, "event"],
+                    "mensaje_2": eventos.at[b, "message_id"], "tipo_2": eventos.at[b, "kind"],
+                    "concurrentes": concurrentes(a, b),
+                })
+
+    ids = eventos.index.tolist()
+    total, menor_pero_concurrente = 0, 0
+    for i, a in enumerate(ids):
+        for b in ids[i + 1:]:
+            total += 1
+            if eventos.at[a, "clock"] != eventos.at[b, "clock"] and concurrentes(a, b):
+                menor_pero_concurrente += 1
+    return pd.DataFrame(filas), menor_pero_concurrente, total
+
+
+# ---------------------------------------------------------------------------
+# Paso 5: guardar resultados (CSV y tablas LaTeX)
+# ---------------------------------------------------------------------------
+def tex(texto) -> str:
+    return str(texto).replace("_", r"\_")
+
+
+def escribir_tablas(resumen: pd.DataFrame, ejemplos: pd.DataFrame) -> None:
+    lineas = [
+        r"\begin{tabular}{llrrrrr}", r"\toprule",
+        r"Conjunto & Mecanismo & Eventos & Mensajes & Cumplen & Fallan & Iguales conc. \\",
+        r"\midrule",
+    ]
+    for _, f in resumen.iterrows():
+        lineas.append(
+            f"{tex(f['conjunto'])} & {f['mecanismo']} & {f['eventos']} & {f['mensajes']} & "
+            f"{f['cumplen']} & {f['fallan']} & {f['iguales_concurrentes']} \\\\"
+        )
+    lineas += [r"\bottomrule", r"\end{tabular}"]
+    (CARPETA_SALIDA / "lamport_resumen.tex").write_text("\n".join(lineas) + "\n", encoding="utf-8")
+
+    lineas = [
+        r"\begin{tabular}{lrll}", r"\toprule",
+        r"Conjunto & Reloj & Evento 1 & Evento 2 \\", r"\midrule",
+    ]
+    for _, f in ejemplos.iterrows():
+        e1 = f"{f['nodo_1']} {f['evento_1']} {f['tipo_1']} {f['mensaje_1']}"
+        e2 = f"{f['nodo_2']} {f['evento_2']} {f['tipo_2']} {f['mensaje_2']}"
+        lineas.append(f"{tex(f['conjunto'])} & {f['clock']} & {tex(e1)} & {tex(e2)} \\\\")
+    lineas += [r"\bottomrule", r"\end{tabular}"]
+    (CARPETA_SALIDA / "lamport_ejemplos.tex").write_text("\n".join(lineas) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     carpeta = Path(sys.argv[1]) if len(sys.argv) > 1 else CARPETA_DATOS
     conjuntos = cargar_conjuntos(carpeta)
@@ -85,21 +190,32 @@ def main() -> int:
         return 1
     CARPETA_SALIDA.mkdir(parents=True, exist_ok=True)
 
-    resumen, todos_pares = [], []
+    resumen, todos_pares, ejemplos = [], [], []
     for nombre, eventos in conjuntos.items():
         eventos = eventos.reset_index(drop=True)
         eventos["id"] = eventos.index
 
         pares = verificar_mensajes(emparejar(eventos))
         sin_pareja = len(eventos) - 2 * len(pares)
+        grafo = construir_grafo(eventos, pares)
+        iguales, menor_conc, total = buscar_concurrentes(eventos, grafo)
+
+        n_iguales = len(iguales)
+        n_iguales_conc = int(iguales["concurrentes"].sum()) if n_iguales else 0
         resumen.append({
             "conjunto": nombre, "mecanismo": mecanismo(nombre),
             "eventos": len(eventos), "mensajes": len(pares),
             "cumplen": int(pares["cumple"].sum()), "fallan": int((~pares["cumple"]).sum()),
             "sin_pareja": sin_pareja,
+            "iguales_distinto_nodo": n_iguales, "iguales_concurrentes": n_iguales_conc,
+            "reloj_distinto_pero_concurrentes": menor_conc, "pares_revisados": total,
         })
         pares.insert(0, "conjunto", nombre)
         todos_pares.append(pares)
+        if n_iguales_conc:
+            ejemplo = iguales[iguales["concurrentes"]].iloc[[0]].copy()
+            ejemplo.insert(0, "conjunto", nombre)
+            ejemplos.append(ejemplo)
 
         print(f"\n=== {nombre} ({mecanismo(nombre)}) ===")
         print(f"Eventos: {len(eventos)} | mensajes emparejados: {len(pares)} | sin pareja: {sin_pareja}")
@@ -107,10 +223,22 @@ def main() -> int:
         for _, f in pares[~pares["cumple"]].iterrows():
             print(f"  FALLA: {f['node_env']}->{f['node_rec']} msg {f['message_id']} "
                   f"({f['kind']}): envío {f['clock_env']}, recepción {f['clock_rec']}")
+        print(f"Pares de nodos distintos con el mismo reloj: {n_iguales} "
+              f"(concurrentes: {n_iguales_conc})")
+        print(f"Pares con reloj distinto pero concurrentes: {menor_conc} de {total}")
+        if n_iguales_conc:
+            f = iguales[iguales["concurrentes"]].iloc[0]
+            print(f"  Ejemplo: reloj {f['clock']} -> {f['nodo_1']} {f['evento_1']} "
+                  f"{f['tipo_1']} {f['mensaje_1']}  y  {f['nodo_2']} {f['evento_2']} "
+                  f"{f['tipo_2']} {f['mensaje_2']}")
 
     resumen = pd.DataFrame(resumen)
+    ejemplos = pd.concat(ejemplos, ignore_index=True) if ejemplos else pd.DataFrame()
     resumen.to_csv(CARPETA_SALIDA / "lamport_resumen.csv", index=False)
     pd.concat(todos_pares, ignore_index=True).to_csv(CARPETA_SALIDA / "lamport_pares.csv", index=False)
+    if not ejemplos.empty:
+        ejemplos.to_csv(CARPETA_SALIDA / "lamport_ejemplos.csv", index=False)
+    escribir_tablas(resumen, ejemplos)
 
     fallas = int(resumen["fallan"].sum())
     print(f"\nResultado global: {'TODOS los mensajes cumplen' if fallas == 0 else f'{fallas} mensajes fallan'}")

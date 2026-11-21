@@ -1,0 +1,5 @@
+conjunto,mecanismo,eventos,mensajes,cumplen,fallan,sin_pareja,iguales_distinto_nodo,iguales_concurrentes,reloj_distinto_pero_concurrentes,pares_revisados
+demo_grpc,gRPC,60,30,30,0,0,2,2,39,1770
+tcp_20_100b_eventos,TCP,80,40,40,0,0,19,19,75,3160
+tcp_20_10kib_eventos,TCP,80,40,40,0,0,19,19,75,3160
+tcp_concurrente_10kib_eventos,TCP,84,42,42,0,0,68,68,222,3486
