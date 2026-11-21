@@ -1,0 +1,9 @@
+# Entorno de la práctica GA-SUM-01 / PE-U1.
+# Python 3.11 o superior (las mediciones se hicieron con 3.14.8 en Windows).
+# Versiones exactas con las que se ejecutaron las corridas de gRPC:
+grpcio==1.85.3
+grpcio-tools==1.85.3
+protobuf==7.36.2
+
+# Análisis de resultados: Darwin fija aquí las versiones exactas de pandas y
+# matplotlib que use para generar las tablas y los gráficos.

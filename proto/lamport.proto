@@ -1,0 +1,79 @@
+// Contrato de comunicación entre los tres nodos de la práctica GA-SUM-01 / PE-U1.
+// Elaborado por Angello Agustín Mendoza Bermello.
+//
+// El mensaje replica los campos del JSON que usa el transporte TCP del mismo
+// repositorio: los tres campos exigidos por el enunciado (sender, timestamp,
+// message) más run_id, message_id y kind, necesarios para emparejar cada envío
+// con su recepción y verificar el reloj de Lamport.
+//
+// El archivo define dos servicios:
+//   NodoLamport  es el servicio del enunciado y es el canal que se mide.
+//   ControlNodo  es el canal de control que usa el lanzador de experimentos
+//                para pedirle a un nodo que envíe un mensaje. Se mantiene
+//                aparte para que el intercambio medido sea una sola llamada
+//                remota, comparable con el intercambio de TCP.
+
+syntax = "proto3";
+
+package lamport.v1;
+
+// Mensaje de aplicación que viaja del nodo emisor al nodo receptor.
+message Mensaje {
+  string sender = 1;      // nodo emisor: nodo-A, nodo-B o nodo-C
+  int64 timestamp = 2;    // valor del reloj lógico de Lamport al enviar
+  string message = 3;     // carga útil medida: 100 B o 10 KiB de texto ASCII
+  string run_id = 4;      // identifica la corrida completa
+  string message_id = 5;  // identifica el intercambio; solicitud y respuesta lo comparten
+  string kind = 6;        // "request" o "response"
+}
+
+// Acuse que devuelve el nodo receptor con su propio sello lógico.
+message Acuse {
+  string sender = 1;      // nodo que acusa recibo
+  int64 timestamp = 2;    // reloj del nodo emisor del acuse, ya actualizado
+  string message = 3;     // carga útil devuelta sin modificaciones
+  string run_id = 4;
+  string message_id = 5;
+  string kind = 6;        // "response"
+  bool ok = 7;            // el receptor procesó el mensaje
+}
+
+// Servicio del enunciado: llamada a procedimiento remoto con la que un nodo
+// entrega un mensaje a otro. Es la llamada que se cronometra.
+service NodoLamport {
+  rpc EnviarMensaje (Mensaje) returns (Acuse);
+}
+
+// --- Canal de control (solo orquesta el experimento, no se cronometra) ---
+
+message Vacio {}
+
+message EstadoListo {
+  bool listo = 1;
+  string detalle = 2;
+}
+
+// Orden de envío: el nodo que la recibe es quien origina el mensaje, de modo
+// que el reloj de Lamport de cada nodo vive en su propio proceso.
+message Orden {
+  string destino = 1;
+  string run_id = 2;
+  string message_id = 3;
+  string message = 4;
+}
+
+// Resultado que devuelve el nodo emisor con el RTT medido en su propio proceso.
+message Resultado {
+  bool ok = 1;
+  double rtt_ms = 2;
+  int64 sello_envio = 3;
+  int64 sello_acuse = 4;
+  bytes mensaje_serializado = 5;  // tamaño real en el cable, para el análisis
+}
+
+service ControlNodo {
+  // Espera a que los canales hacia los otros nodos estén establecidos.
+  rpc Preparar (Vacio) returns (EstadoListo);
+  // Pide al nodo que envíe un mensaje y devuelve el RTT medido.
+  rpc Intercambiar (Orden) returns (Resultado);
+}
