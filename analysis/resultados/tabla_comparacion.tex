@@ -1,0 +1,17 @@
+% Generado por analysis/estadisticas.py; no editar a mano.
+\begin{table}[htbp]
+\centering
+\small
+\caption{RTT medio y diferencia de gRPC respecto a TCP, (gRPC $-$ TCP) / TCP}
+\label{tab:comparacion}
+\begin{tabular}{llrrrrrr}
+\hline
+Carga & Modo & TCP (ms) & gRPC (ms) & Media & Mediana & P95 & Rendimiento \\
+\hline
+100 B & secuencial & 0,1152 & 0,6549 & +468,7 \% & +547,6 \% & +467,5 \% & $-$89,6 \% \\
+100 B & concurrente & 0,3110 & 0,5554 & +78,6 \% & +71,4 \% & +84,5 \% & $-$63,6 \% \\
+10 KiB & secuencial & 0,2122 & 0,7948 & +274,5 \% & +224,0 \% & +420,1 \% & $-$82,9 \% \\
+10 KiB & concurrente & 0,5722 & 0,9080 & +58,7 \% & +27,9 \% & +145,4 \% & $-$55,9 \% \\
+\hline
+\end{tabular}
+\end{table}
