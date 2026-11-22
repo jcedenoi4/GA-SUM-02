@@ -2,10 +2,9 @@
 
 Parte de entorno.condiciones(), que Angello escribió para los nodos gRPC, y le
 agrega lo que necesita el análisis: el nombre comercial del procesador, el plan
-de energía, las versiones de los paquetes y la resolución de los relojes.
+de energía, las versiones de los paquetes y la resolución de los relojes
 
 Para revisar qué se va a registrar:
-
     python analysis/entorno_experimento.py
 """
 

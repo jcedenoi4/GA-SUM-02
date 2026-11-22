@@ -4,10 +4,9 @@ Cada ejecución crea data/protocolo/sesion_<fecha UTC>/ con condiciones.json,
 manifiesto.csv y los archivos de cada corrida. Por cada combinación de
 mecanismo, tamaño y modo se hace una corrida de calentamiento y luego las
 repeticiones medidas. El orden de las combinaciones rota en cada repetición
-para que un cambio de carga de la máquina no afecte siempre a la misma.
+para que un cambio de carga de la máquina no afecte siempre a la misma
 
 Uso, desde la raíz del repositorio:
-
     python analysis/ejecutar_protocolo.py --mecanismos tcp grpc
 """
 
