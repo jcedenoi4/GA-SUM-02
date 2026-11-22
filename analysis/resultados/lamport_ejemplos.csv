@@ -1,5 +1,5 @@
-conjunto,clock,nodo_1,evento_1,mensaje_1,tipo_1,nodo_2,evento_2,mensaje_2,tipo_2,concurrentes
-demo_grpc,20,nodo-A,receive,0005,response,nodo-B,send,0001,request,True
-tcp_20_100b_eventos,4,nodo-A,receive,0001,response,nodo-B,send,0002,request,True
-tcp_20_10kib_eventos,4,nodo-A,receive,0001,response,nodo-B,send,0002,request,True
-tcp_concurrente_10kib_eventos,1,nodo-A,send,0001,request,nodo-B,send,0002,request,True
+conjunto,clock,nodo_1,evento_1,tipo_1,mensaje_1,nodo_2,evento_2,tipo_2,mensaje_2
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_r01_eventos,1,nodo-A,send,request,0001,nodo-B,send,request,0002
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_r01_eventos,4,nodo-A,receive,response,0001,nodo-B,send,request,0002
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_r01_eventos,1,nodo-A,send,request,0001,nodo-B,send,request,0002
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_r01_eventos,4,nodo-A,receive,response,0001,nodo-B,send,request,0002

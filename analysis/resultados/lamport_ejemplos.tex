@@ -1,10 +1,10 @@
-\begin{tabular}{lrll}
+\begin{tabular}{lllr}
 \toprule
-Conjunto & Reloj & Evento 1 & Evento 2 \\
+Corrida & Evento 1 & Evento 2 & Reloj \\
 \midrule
-demo\_grpc & 20 & nodo-A receive response 0005 & nodo-B send request 0001 \\
-tcp\_20\_100b\_eventos & 4 & nodo-A receive response 0001 & nodo-B send request 0002 \\
-tcp\_20\_10kib\_eventos & 4 & nodo-A receive response 0001 & nodo-B send request 0002 \\
-tcp\_concurrente\_10kib\_eventos & 1 & nodo-A send request 0001 & nodo-B send request 0002 \\
+grpc\_100b\_concurrente\_r01\_eventos & nodo-A send request 0001 & nodo-B send request 0002 & 1 \\
+grpc\_100b\_secuencial\_r01\_eventos & nodo-A receive response 0001 & nodo-B send request 0002 & 4 \\
+tcp\_100b\_concurrente\_r01\_eventos & nodo-A send request 0001 & nodo-B send request 0002 & 1 \\
+tcp\_100b\_secuencial\_r01\_eventos & nodo-A receive response 0001 & nodo-B send request 0002 & 4 \\
 \bottomrule
 \end{tabular}

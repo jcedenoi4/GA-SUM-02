@@ -1,10 +1,14 @@
-\begin{tabular}{llrrrrr}
+\begin{tabular}{lllrrrrr}
 \toprule
-Conjunto & Mecanismo & Eventos & Mensajes & Cumplen & Fallan & Iguales conc. \\
+Mecanismo & Carga & Modo & Corridas & Mensajes & Cumplen & Fallan & Iguales y conc. \\
 \midrule
-demo\_grpc & gRPC & 60 & 30 & 30 & 0 & 2 \\
-tcp\_20\_100b\_eventos & TCP & 80 & 40 & 40 & 0 & 19 \\
-tcp\_20\_10kib\_eventos & TCP & 80 & 40 & 40 & 0 & 19 \\
-tcp\_concurrente\_10kib\_eventos & TCP & 84 & 42 & 42 & 0 & 68 \\
+gRPC & 100 B & concurrente & 5 & 1\,000 & 1\,000 & 0 & 1\,917 \\
+gRPC & 100 B & secuencial & 5 & 1\,000 & 1\,000 & 0 & 495 \\
+gRPC & 10 KiB & concurrente & 5 & 1\,000 & 1\,000 & 0 & 1\,944 \\
+gRPC & 10 KiB & secuencial & 5 & 1\,000 & 1\,000 & 0 & 495 \\
+TCP & 100 B & concurrente & 5 & 1\,000 & 1\,000 & 0 & 1\,816 \\
+TCP & 100 B & secuencial & 5 & 1\,000 & 1\,000 & 0 & 495 \\
+TCP & 10 KiB & concurrente & 5 & 1\,000 & 1\,000 & 0 & 1\,846 \\
+TCP & 10 KiB & secuencial & 5 & 1\,000 & 1\,000 & 0 & 495 \\
 \bottomrule
 \end{tabular}

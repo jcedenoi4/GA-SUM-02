@@ -1,0 +1,58 @@
+conjunto,origen,mecanismo,tamano,modo,fase,eventos,mensajes,cumplen,fallan,sin_pareja,pares_distinto_nodo,iguales_distinto_nodo,iguales_concurrentes,reloj_distinto_concurrentes
+demo_grpc,exploratorio,gRPC,,,,60,30,30,0,0,1200,2,2,39
+grpc_20_100b_eventos,exploratorio,gRPC,,,,80,40,40,0,0,2132,19,19,75
+grpc_20_10kib_eventos,exploratorio,gRPC,,,,80,40,40,0,0,2132,19,19,75
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_cal_eventos,protocolo,gRPC,100 B,concurrente,calentamiento,400,200,200,0,0,53332,388,388,1172
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_r01_eventos,protocolo,gRPC,100 B,concurrente,medida,400,200,200,0,0,53332,365,365,1135
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_r02_eventos,protocolo,gRPC,100 B,concurrente,medida,400,200,200,0,0,53332,396,396,1177
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_r03_eventos,protocolo,gRPC,100 B,concurrente,medida,400,200,200,0,0,53332,396,396,1177
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_r04_eventos,protocolo,gRPC,100 B,concurrente,medida,400,200,200,0,0,53332,372,372,1159
+protocolo/sesion_20261122T011620Z/grpc_100b_concurrente_r05_eventos,protocolo,gRPC,100 B,concurrente,medida,400,200,200,0,0,53332,388,388,1171
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_cal_eventos,protocolo,gRPC,100 B,secuencial,calentamiento,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_r01_eventos,protocolo,gRPC,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_r02_eventos,protocolo,gRPC,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_r03_eventos,protocolo,gRPC,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_r04_eventos,protocolo,gRPC,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_100b_secuencial_r05_eventos,protocolo,gRPC,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_10kib_concurrente_cal_eventos,protocolo,gRPC,10 KiB,concurrente,calentamiento,400,200,200,0,0,53332,396,396,1177
+protocolo/sesion_20261122T011620Z/grpc_10kib_concurrente_r01_eventos,protocolo,gRPC,10 KiB,concurrente,medida,400,200,200,0,0,53332,380,380,1165
+protocolo/sesion_20261122T011620Z/grpc_10kib_concurrente_r02_eventos,protocolo,gRPC,10 KiB,concurrente,medida,400,200,200,0,0,53332,376,376,1148
+protocolo/sesion_20261122T011620Z/grpc_10kib_concurrente_r03_eventos,protocolo,gRPC,10 KiB,concurrente,medida,400,200,200,0,0,53332,396,396,1177
+protocolo/sesion_20261122T011620Z/grpc_10kib_concurrente_r04_eventos,protocolo,gRPC,10 KiB,concurrente,medida,400,200,200,0,0,53332,396,396,1177
+protocolo/sesion_20261122T011620Z/grpc_10kib_concurrente_r05_eventos,protocolo,gRPC,10 KiB,concurrente,medida,400,200,200,0,0,53332,396,396,1177
+protocolo/sesion_20261122T011620Z/grpc_10kib_secuencial_cal_eventos,protocolo,gRPC,10 KiB,secuencial,calentamiento,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_10kib_secuencial_r01_eventos,protocolo,gRPC,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_10kib_secuencial_r02_eventos,protocolo,gRPC,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_10kib_secuencial_r03_eventos,protocolo,gRPC,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_10kib_secuencial_r04_eventos,protocolo,gRPC,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/grpc_10kib_secuencial_r05_eventos,protocolo,gRPC,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_cal_eventos,protocolo,TCP,100 B,concurrente,calentamiento,400,200,200,0,0,53332,340,340,1135
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_r01_eventos,protocolo,TCP,100 B,concurrente,medida,400,200,200,0,0,53332,388,388,1171
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_r02_eventos,protocolo,TCP,100 B,concurrente,medida,400,200,200,0,0,53332,349,349,1140
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_r03_eventos,protocolo,TCP,100 B,concurrente,medida,400,200,200,0,0,53332,357,357,1145
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_r04_eventos,protocolo,TCP,100 B,concurrente,medida,400,200,200,0,0,53332,364,364,1153
+protocolo/sesion_20261122T011620Z/tcp_100b_concurrente_r05_eventos,protocolo,TCP,100 B,concurrente,medida,400,200,200,0,0,53332,358,358,1147
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_cal_eventos,protocolo,TCP,100 B,secuencial,calentamiento,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_r01_eventos,protocolo,TCP,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_r02_eventos,protocolo,TCP,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_r03_eventos,protocolo,TCP,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_r04_eventos,protocolo,TCP,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_100b_secuencial_r05_eventos,protocolo,TCP,100 B,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_10kib_concurrente_cal_eventos,protocolo,TCP,10 KiB,concurrente,calentamiento,400,200,200,0,0,53332,365,365,1151
+protocolo/sesion_20261122T011620Z/tcp_10kib_concurrente_r01_eventos,protocolo,TCP,10 KiB,concurrente,medida,400,200,200,0,0,53332,357,357,1148
+protocolo/sesion_20261122T011620Z/tcp_10kib_concurrente_r02_eventos,protocolo,TCP,10 KiB,concurrente,medida,400,200,200,0,0,53332,373,373,1157
+protocolo/sesion_20261122T011620Z/tcp_10kib_concurrente_r03_eventos,protocolo,TCP,10 KiB,concurrente,medida,400,200,200,0,0,53332,364,364,1153
+protocolo/sesion_20261122T011620Z/tcp_10kib_concurrente_r04_eventos,protocolo,TCP,10 KiB,concurrente,medida,400,200,200,0,0,53332,388,388,1171
+protocolo/sesion_20261122T011620Z/tcp_10kib_concurrente_r05_eventos,protocolo,TCP,10 KiB,concurrente,medida,400,200,200,0,0,53332,364,364,1153
+protocolo/sesion_20261122T011620Z/tcp_10kib_secuencial_cal_eventos,protocolo,TCP,10 KiB,secuencial,calentamiento,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_10kib_secuencial_r01_eventos,protocolo,TCP,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_10kib_secuencial_r02_eventos,protocolo,TCP,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_10kib_secuencial_r03_eventos,protocolo,TCP,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_10kib_secuencial_r04_eventos,protocolo,TCP,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+protocolo/sesion_20261122T011620Z/tcp_10kib_secuencial_r05_eventos,protocolo,TCP,10 KiB,secuencial,medida,400,200,200,0,0,53332,99,99,395
+tcp_20_100b_eventos,exploratorio,TCP,,,,80,40,40,0,0,2132,19,19,75
+tcp_20_10kib_eventos,exploratorio,TCP,,,,80,40,40,0,0,2132,19,19,75
+tcp_concurrente_10kib_eventos,exploratorio,TCP,,,,84,42,42,0,0,2352,68,68,222
+tcp_concurrente_10kib_r01_eventos,exploratorio,TCP,,,,400,200,200,0,0,53332,396,396,1177
+tcp_secuencial_100b_r01_eventos,exploratorio,TCP,,,,80,40,40,0,0,2132,19,19,75
+tcp_secuencial_100b_r02_eventos,exploratorio,TCP,,,,80,40,40,0,0,2132,19,19,75

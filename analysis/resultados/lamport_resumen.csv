@@ -1,5 +1,9 @@
-conjunto,mecanismo,eventos,mensajes,cumplen,fallan,sin_pareja,iguales_distinto_nodo,iguales_concurrentes,reloj_distinto_pero_concurrentes,pares_revisados
-demo_grpc,gRPC,60,30,30,0,0,2,2,39,1770
-tcp_20_100b_eventos,TCP,80,40,40,0,0,19,19,75,3160
-tcp_20_10kib_eventos,TCP,80,40,40,0,0,19,19,75,3160
-tcp_concurrente_10kib_eventos,TCP,84,42,42,0,0,68,68,222,3486
+mecanismo,tamano,modo,corridas,eventos,mensajes,cumplen,fallan,iguales_concurrentes,iguales_distinto_nodo,reloj_distinto_concurrentes
+gRPC,100 B,concurrente,5,2000,1000,1000,0,1917,1917,5819
+gRPC,100 B,secuencial,5,2000,1000,1000,0,495,495,1975
+gRPC,10 KiB,concurrente,5,2000,1000,1000,0,1944,1944,5844
+gRPC,10 KiB,secuencial,5,2000,1000,1000,0,495,495,1975
+TCP,100 B,concurrente,5,2000,1000,1000,0,1816,1816,5756
+TCP,100 B,secuencial,5,2000,1000,1000,0,495,495,1975
+TCP,10 KiB,concurrente,5,2000,1000,1000,0,1846,1846,5782
+TCP,10 KiB,secuencial,5,2000,1000,1000,0,495,495,1975
