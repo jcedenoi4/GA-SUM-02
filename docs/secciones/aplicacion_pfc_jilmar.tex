@@ -1,0 +1,29 @@
+\subsection{Aplicación al PFC de gestión de pre-sustentaciones}
+
+En el PFC del equipo BCCP desarrollamos un sistema de gestión de
+documentos de pre-sustentaciones de trabajos de titulación. En la
+arquitectura del proyecto, el servicio de Evaluación y actas necesita
+consultar al de Solicitudes y documentos antes de habilitar la rúbrica
+para el tribunal~\cite{pfcBccpComunicacion}.
+
+\paragraph{gRPC para consultar una solicitud.}
+En el esqueleto del PFC, Evaluación llama al método
+\texttt{ConsultarSolicitud} con el identificador de la solicitud.
+Solicitudes devuelve su estado, si el informe y el reporte de URKUND
+están cargados y el porcentaje de coincidencia. Usamos gRPC porque
+Evaluación necesita una respuesta síncrona y un contrato que fije los
+tipos de esos campos. El cliente espera hasta cinco segundos y
+comunica el estado de error si falla la consulta. En el flujo previsto,
+sin esos datos confirmados, Evaluación no habilita la
+rúbrica~\cite{pfcBccpRepositorio,pfcBccpComunicacion}.
+
+\paragraph{Sockets TCP para un diagnóstico interno.}
+Como extensión de la práctica, proponemos una prueba de conectividad
+desde el entorno de Evaluación hacia el puerto \(50051\) de Solicitudes,
+que es el puerto del esqueleto local~\cite{pfcBccpRepositorio}.
+Un cliente de diagnóstico podría abrir un socket TCP con un tiempo de
+espera y registrar si la conexión se estableció, fue rechazada o expiró.
+Ese resultado ayudaría a distinguir un problema de conectividad de un
+error devuelto por la llamada gRPC. Una conexión establecida indica que
+el puerto acepta conexiones. Para comprobar que el trámite puede
+consultarse correctamente, necesitamos ejecutar la llamada gRPC.
