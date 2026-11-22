@@ -1,0 +1,3 @@
+# Los datos se guardan byte a byte, sin convertir finales de línea, para que
+# data/SHA256SUMS coincida en cualquier sistema donde se clone el repositorio.
+data/** -text
