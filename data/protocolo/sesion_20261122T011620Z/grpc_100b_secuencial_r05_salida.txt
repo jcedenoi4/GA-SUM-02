@@ -1,0 +1,5 @@
+C:\Python314\python.exe C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\src\grpc\lanzador.py --count 100 --size 100 --output C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\data\protocolo\sesion_20261122T011620Z\grpc_100b_secuencial_r05
+
+Duración: 0.109041 s | 100 intercambios | 100 B | sequential | 400 eventos
+Eventos: grpc_100b_secuencial_r05_eventos.csv
+Latencias: grpc_100b_secuencial_r05_latencias.csv

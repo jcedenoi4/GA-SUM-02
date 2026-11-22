@@ -1,0 +1,32 @@
+{
+  "sistema_operativo": "Windows",
+  "version_so": "10.0.26300",
+  "procesador": "AMD Ryzen 7 7435HS",
+  "nucleos": 16,
+  "memoria_gib": 15.8,
+  "python": "3.14.8",
+  "equipo": "Soge",
+  "usuario": "aamen",
+  "registrado_utc": "2026-11-22T01:16:20+00:00",
+  "edicion_so": "Windows-11-10.0.26300-SP0",
+  "plan_energia": "Equilibrado",
+  "resolucion_reloj_pared_s": 1e-07,
+  "resolucion_perf_counter_s": 1e-07,
+  "paquetes": {
+    "grpcio": "1.85.3",
+    "grpcio-tools": "1.85.3",
+    "protobuf": "7.36.2",
+    "pandas": "3.1.1",
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.5"
+  },
+  "parametros": {
+    "mecanismos": [
+      "tcp",
+      "grpc"
+    ],
+    "repeticiones": 5,
+    "envios_por_corrida": 100,
+    "pausa_s": 1.0
+  }
+}

@@ -1,0 +1,5 @@
+C:\Python314\python.exe C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\src\grpc\lanzador.py --count 100 --size 10240 --output C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\data\protocolo\sesion_20261122T011620Z\grpc_10kib_concurrente_r01 --concurrent
+
+Duración: 0.063789 s | 100 intercambios | 10240 B | concurrent | 400 eventos
+Eventos: grpc_10kib_concurrente_r01_eventos.csv
+Latencias: grpc_10kib_concurrente_r01_latencias.csv

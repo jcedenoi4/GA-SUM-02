@@ -1,0 +1,9 @@
+C:\Python314\python.exe C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\src\sockets\client.py --count 100 --size 100 --output C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\data\protocolo\sesion_20261122T011620Z\tcp_100b_concurrente_r03 --concurrent
+
+nodo-A escucha en 127.0.0.1:5000
+nodo-B escucha en 127.0.0.1:5001
+nodo-C escucha en 127.0.0.1:5002
+100 intercambios | 100 B | concurrent | 400 eventos locales
+Duración: 0.015983 s | Rendimiento: 6256.53 intercambios/s
+Eventos: C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\data\protocolo\sesion_20261122T011620Z\tcp_100b_concurrente_r03_eventos.csv
+Latencias: C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\data\protocolo\sesion_20261122T011620Z\tcp_100b_concurrente_r03_latencias.csv

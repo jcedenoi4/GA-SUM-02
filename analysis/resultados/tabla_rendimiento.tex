@@ -1,0 +1,21 @@
+% Generado por analysis/estadisticas.py; no editar a mano.
+\begin{table}[htbp]
+\centering
+\small
+\caption{Rendimiento por mecanismo, carga y modo}
+\label{tab:rendimiento}
+\begin{tabular}{lllrrr}
+\hline
+Mecanismo & Carga & Modo & Corridas & Mensajes/s & IC 95 \% ($\pm$) \\
+\hline
+TCP & 100 B & secuencial & 5 & 7\,960,1 & 1\,082,8 \\
+TCP & 100 B & concurrente & 5 & 5\,809,4 & 728,0 \\
+TCP & 10 KiB & secuencial & 5 & 4\,533,3 & 989,0 \\
+TCP & 10 KiB & concurrente & 5 & 3\,549,3 & 515,4 \\
+gRPC & 100 B & secuencial & 5 & 825,6 & 212,0 \\
+gRPC & 100 B & concurrente & 5 & 2\,112,9 & 427,3 \\
+gRPC & 10 KiB & secuencial & 5 & 773,4 & 367,3 \\
+gRPC & 10 KiB & concurrente & 5 & 1\,565,0 & 772,0 \\
+\hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,21 @@
+% Generado por analysis/estadisticas.py; no editar a mano.
+\begin{table}[htbp]
+\centering
+\small
+\caption{Latencia de ida y vuelta por mecanismo, carga y modo}
+\label{tab:latencias}
+\begin{tabular}{lllrrrr}
+\hline
+Mecanismo & Carga & Modo & Media (ms) & Mediana (ms) & Desv. est. (ms) & P95 (ms) \\
+\hline
+TCP & 100 B & secuencial & 0,1152 & 0,0953 & 0,0579 & 0,1915 \\
+TCP & 100 B & concurrente & 0,3110 & 0,3014 & 0,0825 & 0,4472 \\
+TCP & 10 KiB & secuencial & 0,2122 & 0,1869 & 0,0740 & 0,3451 \\
+TCP & 10 KiB & concurrente & 0,5722 & 0,5455 & 0,1624 & 0,8504 \\
+gRPC & 100 B & secuencial & 0,6549 & 0,6171 & 0,2141 & 1,0869 \\
+gRPC & 100 B & concurrente & 0,5554 & 0,5166 & 0,1612 & 0,8249 \\
+gRPC & 10 KiB & secuencial & 0,7948 & 0,6054 & 0,4450 & 1,7950 \\
+gRPC & 10 KiB & concurrente & 0,9080 & 0,6980 & 0,7440 & 2,0868 \\
+\hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,6 @@
+C:\Python314\python.exe C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\src\grpc\lanzador.py --count 100 --size 10240 --output C:\Users\aamen\Documents\7mo\_work\GA-SUM-02\data\protocolo\sesion_20261122T011620Z\grpc_10kib_concurrente_cal --concurrent
+
+Duración: 0.039210 s | 100 intercambios | 10240 B | concurrent | 400 eventos
+Eventos: grpc_10kib_concurrente_cal_eventos.csv
+Latencias: grpc_10kib_concurrente_cal_latencias.csv
+I1122 01:16:38.725231   17848 chttp2_transport.cc:1403] ipv4:127.0.0.1:5000: Got goaway [2] err=UNAVAILABLE:GOAWAY received; Error code: 2; Debug Text: Cancelling all calls {http2_error:2}
