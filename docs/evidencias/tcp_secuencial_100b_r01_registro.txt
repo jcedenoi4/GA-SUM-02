@@ -1,0 +1,10 @@
+Prueba TCP - Jilmar Cedeno Intriago
+PS> python src/sockets/client.py --output data/captura_tcp_jilmar_20261121_210407
+
+nodo-A escucha en 127.0.0.1:5000
+nodo-B escucha en 127.0.0.1:5001
+nodo-C escucha en 127.0.0.1:5002
+20 intercambios | 100 B | sequential | 80 eventos locales
+Duraci�n: 0.005986 s | Rendimiento: 3341.30 intercambios/s
+Eventos: data\captura_tcp_jilmar_20261121_210407_eventos.csv
+Latencias: data\captura_tcp_jilmar_20261121_210407_latencias.csv

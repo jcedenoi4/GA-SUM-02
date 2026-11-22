@@ -1,0 +1,7 @@
+Discusión de resultados — aporte TCP
+
+En las corridas secuenciales con mensajes de 100 B, obtuvimos una mediana de ida y vuelta de 0,095 ms con TCP y de 0,617 ms con gRPC. El rendimiento medio fue de 7 960 y 826 intercambios por segundo, respectivamente. La diferencia favorece a TCP directo en esta configuración de loopback con conexiones persistentes. Estas cifras describen el comportamiento de nuestras dos implementaciones bajo el protocolo común.
+
+En TCP definimos una cabecera de cuatro bytes para delimitar cada mensaje JSON. También validamos los campos y la correspondencia de las respuestas, y configuramos tiempos de espera para las operaciones del socket. En gRPC, el esquema de Protocol Buffers define los tipos y el contrato del servicio. Así, con TCP tuvimos más control sobre el formato del mensaje y asumimos directamente su validación y el manejo de errores.
+
+Fuente de las cifras: analysis/resultados/estadisticas_resumen.csv, cinco corridas y 500 intercambios por mecanismo para esta condición.
