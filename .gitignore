@@ -17,3 +17,14 @@ desktop.ini
 
 # Carpeta temporal que usa el lanzador mientras corre una tanda
 data/_nodos/
+
+# Intermedios de LaTeX (el PDF compilado sí se versiona)
+docs/*.aux
+docs/*.bbl
+docs/*.bcf
+docs/*.blg
+docs/*.fls
+docs/*.out
+docs/*.run.xml
+docs/*.synctex.gz
+docs/*.toc

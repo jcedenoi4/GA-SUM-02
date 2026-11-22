@@ -1,0 +1,73 @@
+% Aporte de Angello Mendoza Bermello. Incluir desde el informe principal.
+\subsection{Implementación con gRPC y Protocol Buffers}
+\label{sec:grpc}
+
+El segundo mecanismo es gRPC sobre HTTP/2 con Protocol Buffers. La diferencia con TCP es de nivel de abstracción: no construimos ni leemos los bytes del mensaje, sino que declaramos una interfaz en un archivo de contrato y llamamos a un procedimiento remoto. La biblioteca genera el cliente y el servidor a partir de ese contrato y se encarga de la codificación binaria y del transporte~\cite{thomson2022http2}.
+
+\subsubsection{El contrato en Protocol Buffers}
+
+El archivo \texttt{proto/lamport.proto} declara los mensajes y dos servicios. El servicio \texttt{NodoLamport} es el del enunciado y es la única llamada que se cronometra; \texttt{ControlNodo} es un canal de control que usa el lanzador para ordenar los envíos, de modo que el nodo que origina el mensaje sea el mismo proceso que lo registra. El contenido esencial del contrato es:
+
+\begin{verbatim}
+message Mensaje {
+  string sender = 1;
+  int64  timestamp = 2;
+  string message = 3;
+  string run_id = 4;
+  string message_id = 5;
+  string kind = 6;
+}
+
+message Acuse {
+  string sender = 1;
+  int64  timestamp = 2;
+  string message = 3;
+  string run_id = 4;
+  string message_id = 5;
+  string kind = 6;
+  bool   ok = 7;
+}
+
+service NodoLamport {
+  rpc EnviarMensaje (Mensaje) returns (Acuse);
+}
+
+service ControlNodo {
+  rpc Preparar (Vacio) returns (EstadoListo);
+  rpc Intercambiar (Orden) returns (Resultado);
+}
+\end{verbatim}
+
+Los campos coinciden con los del JSON de TCP (\texttt{sender}, \texttt{timestamp} y \texttt{message}) y añaden \texttt{run\_id}, \texttt{message\_id} y \texttt{kind}, que permiten emparejar cada solicitud con su acuse y verificar el reloj. El campo \texttt{timestamp} es de tipo \texttt{int64}, de modo que el sello lógico viaja como entero y no como texto.
+
+\subsubsection{Generación del código y nodos como procesos}
+
+Generamos el código de Python con \texttt{grpcio-tools} mediante el script \texttt{src/grpc/generar\_stubs.py}. Los archivos generados se conservan en el repositorio para que el proyecto se ejecute sin volver a generar el contrato.
+
+A diferencia de TCP, donde los tres nodos son hilos de un mismo proceso, aquí cada nodo es un proceso independiente. Cada uno escucha en su puerto (\texttt{nodo-A:5000}, \texttt{nodo-B:5001} y \texttt{nodo-C:5002}) y atiende los dos servicios en el mismo puerto. Al recibir una solicitud aplica la regla de recepción del reloj, registra el evento y responde con su propio sello; al detenerse con Ctrl+C escribe su CSV de eventos. Para la prueba concurrente, el lanzador ordena los envíos de los tres nodos con una barrera y cada nodo los atiende con un grupo de hilos, de modo que las tres llamadas remotas están en vuelo al mismo tiempo.
+
+\subsubsection{Reloj de Lamport y ventana de medición}
+
+Cada nodo mantiene un solo reloj aunque cumpla dos papeles: atiende las llamadas que le llegan y origina las que le ordena el canal de control. Las dos reglas del reloj se aplican en el mismo módulo y bajo el mismo bloqueo:
+
+\begin{verbatim}
+def sellar_envio(self, peer, run_id, message_id, kind, carga):
+    with self._candado:
+        self._reloj += 1
+        self._anotar("send", peer, run_id, message_id, kind, carga)
+        return self._reloj
+
+def registrar_recibo(self, peer, run_id, message_id, kind, carga, sello_remoto):
+    with self._candado:
+        self._reloj = max(self._reloj, int(sello_remoto)) + 1
+        self._anotar("receive", peer, run_id, message_id, kind, carga)
+        return self._reloj
+\end{verbatim}
+
+El RTT se toma con \texttt{time.perf\_counter()} dentro del proceso emisor, desde antes de sellar el envío hasta que regresa el acuse. Quedan fuera de la medición el arranque de los procesos y el establecimiento de los canales, que se espera antes de comenzar. La ventana incluye la serialización, el transporte HTTP/2 y la decodificación, igual que la del cliente TCP, de modo que los dos mecanismos se miden con el mismo criterio.
+
+\subsubsection{Desarrollo, tipado y manejo de errores}
+
+El contrato tipado evita analizar el JSON a mano: los campos tienen tipo y el código generado construye los objetos de cada mensaje. El servidor valida el emisor y los campos obligatorios y responde con un código de estado (\texttt{INVALID\_ARGUMENT}) en lugar de fallar en silencio; el cliente comprueba que el acuse corresponda a la solicitud y detiene la corrida si no coincide. Con un nodo apagado, la llamada termina con \texttt{UNAVAILABLE}, lo que permite distinguir un error de red de un error de datos.
+
+El costo de esa comodidad es una pila más profunda: HTTP/2, la biblioteca de gRPC y la codificación binaria. Los estudios de evaluación de gRPC en microservicios reportan esa misma relación entre comodidad y sobrecosto~\cite{niswar2024microservices,ain2025grpc}; en nuestros resultados esa diferencia se mide y se discute con las cifras del protocolo común.

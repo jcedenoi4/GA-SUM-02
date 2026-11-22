@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage[spanish]{babel}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{graphicx}
@@ -31,30 +32,7 @@ percentil 95 y el rendimiento en intercambios por segundo.
 
 \section{Implementación}
 \input{secciones/sockets_tcp}
-
-\section{Resultados preliminares de TCP}
-Ejecutamos las pruebas en Windows con Python 3.14.6 y los tres nodos en
-la interfaz local. Usamos los CSV originales de la carpeta \texttt{data/}
-para verificar los relojes y resumir las latencias.
-
-\begin{table}[htbp]
-\centering
-\caption{Corridas preliminares de TCP en loopback}
-\begin{tabular}{lrrr}
-\hline
-Corrida & Intercambios & Eventos & RTT mediano (ms) \\
-\hline
-100 B, secuencial & 20 & 80 & 0,118300 \\
-10 KiB, secuencial & 20 & 80 & 0,317150 \\
-10 KiB, tres clientes concurrentes & 21 & 84 & 0,751600 \\
-\hline
-\end{tabular}
-\end{table}
-
-En los 122 pares verificados encontramos que el reloj de cada recepción
-fue mayor que el de su envío. Para comparar TCP y gRPC, necesitamos las
-corridas equivalentes de gRPC y las repeticiones del protocolo experimental
-común.
+\input{secciones/grpc}
 
 \section{Protocolo experimental}
 \input{secciones/protocolo_experimental}
