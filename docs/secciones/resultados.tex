@@ -1,0 +1,26 @@
+% Aporte de Darwin Joel Sánchez Vera.
+% Las tablas y los gráficos los genera analysis/estadisticas.py.
+\subsection{Latencia y rendimiento}
+\label{sec:resultados}
+
+Las tablas~\ref{tab:latencias} y~\ref{tab:rendimiento} resumen las 40 corridas medidas de la sesión oficial. Cada fila de latencia reúne 500 RTT y cada valor de rendimiento es la media de cinco corridas. La tabla~\ref{tab:comparacion} expresa cada medida de gRPC como diferencia porcentual respecto a TCP; un valor positivo indica que gRPC obtuvo un valor mayor.
+
+\input{../analysis/resultados/tabla_latencias.tex}
+\input{../analysis/resultados/tabla_rendimiento.tex}
+\input{../analysis/resultados/tabla_comparacion.tex}
+
+La figura~\ref{fig:cajas} muestra la distribución de todos los RTT. Usamos escala logarítmica porque los valores van de 0,08~ms a 6,7~ms y, en escala lineal, las cajas de TCP quedarían aplastadas. La figura~\ref{fig:barras} presenta la media de las corridas con su intervalo de confianza del 95~\%.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../analysis/resultados/grafico_cajas.png}
+\caption{Distribución del RTT por mecanismo, carga y modo}
+\label{fig:cajas}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../analysis/resultados/grafico_barras.png}
+\caption{Latencia media y rendimiento con intervalo de confianza del 95~\%}
+\label{fig:barras}
+\end{figure}

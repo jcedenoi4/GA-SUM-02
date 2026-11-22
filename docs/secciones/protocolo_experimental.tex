@@ -1,0 +1,47 @@
+% Aporte de Darwin Joel Sánchez Vera.
+\subsection{Diseño de las mediciones}
+\label{sec:protocolo}
+
+Comparamos los dos mecanismos con tres factores: el mecanismo (TCP o gRPC), el tamaño de la carga (100~B o 10\,240~B, es decir, 10~KiB) y el modo de envío (secuencial o concurrente). Son ocho combinaciones. Para cada una ejecutamos una corrida de calentamiento, que no entra en el análisis, y cinco corridas medidas de 100 envíos. La sesión completa suma 48 corridas y 4\,000 mediciones de RTT válidas.
+
+Descartamos una corrida completa de calentamiento porque la primera ejecución de un programa todavía no refleja su comportamiento estable. Traini y colaboradores mostraron que la fase de calentamiento configurada en mediciones de rendimiento no siempre lleva al programa a un estado estable~\cite{traini2023steady}. Por eso, además de descartarla, repetimos cinco veces cada combinación y tratamos la corrida como unidad de análisis.
+
+El programa \texttt{analysis/ejecutar\_protocolo.py} ejecuta primero los ocho calentamientos. Después recorre las ocho combinaciones en cada repetición, rotando el orden una posición por repetición. Así, si la máquina se carga durante algunos segundos, esa carga no recae siempre sobre el mismo mecanismo. Ambos mecanismos reciben los mismos argumentos (\texttt{-{}-count}, \texttt{-{}-size}, \texttt{-{}-concurrent} y \texttt{-{}-output}) y producen CSV con las mismas columnas.
+
+En todas las corridas mantuvimos estas condiciones: interfaz \texttt{127.0.0.1}, puertos 5000 a 5002, carga ASCII de longitud fija, respuesta eco, conexiones o canales abiertos antes de medir y ruta circular A$\to$B, B$\to$C y C$\to$A. En el modo concurrente, los tres nodos envían a la vez en grupos de tres, sincronizados con una barrera; con 100 envíos son 33 grupos y un envío final.
+
+\subsection{Medidas}
+
+El RTT de cada envío lo mide el nodo emisor con \texttt{time.perf\_counter()}, desde antes de sellar el mensaje con el reloj de Lamport hasta que decodifica la respuesta. El rendimiento de una corrida es el número de envíos completados dividido entre la duración de la tanda, también medida con \texttt{perf\_counter()} por el programa de cada mecanismo. No usamos la columna \texttt{wall\_time\_utc} para el rendimiento. En Windows, Python 3.12 y las versiones anteriores leen el reloj de pared con una resolución de 15,6~ms, mayor que la duración de muchas corridas, así que todos sus eventos pueden quedar con la misma hora. Por eso \texttt{condiciones.json} registra la resolución de ambos relojes en cada sesión.
+
+El script \texttt{analysis/estadisticas.py} calcula, para cada combinación, la media, la mediana, la desviación estándar muestral y el percentil 95 de los 500 RTT, este último con interpolación lineal. Los 100 envíos de una corrida comparten proceso y conexión, por lo que no son independientes entre sí. Por esa razón, el intervalo de confianza del 95~\% se calcula con las cinco medias por corrida y la distribución $t$ de Student con cuatro grados de libertad ($t = 2{,}776$). Con el mismo criterio se calcula el intervalo del rendimiento.
+
+\subsection{Entorno de ejecución}
+
+La sesión oficial se ejecutó el 22 de noviembre de 2026 entre las 01:16 y las 01:18 UTC, con TCP y gRPC en la misma sesión y el mismo intérprete. El archivo \texttt{condiciones.json} de la sesión registra el entorno que resume la tabla~\ref{tab:entorno}.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Condiciones de la máquina durante la sesión oficial}
+\label{tab:entorno}
+\begin{tabular}{ll}
+\hline
+Elemento & Valor \\
+\hline
+Sistema operativo & Windows 11 (10.0.26300) \\
+Procesador & AMD Ryzen 7 7435HS, 16 núcleos lógicos \\
+Memoria & 15,8 GiB \\
+Plan de energía & Equilibrado \\
+Python & 3.14.8 \\
+Paquetes & grpcio 1.85.3, protobuf 7.36.2, pandas 3.1.1, matplotlib 3.11.2 \\
+Resolución de los relojes & $10^{-7}$~s (pared y \texttt{perf\_counter}) \\
+TCP & tres nodos en un mismo proceso, con servidores en hilos \\
+gRPC & tres procesos locales \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Integridad de los datos}
+
+Cada sesión queda en \texttt{data/protocolo/sesion\_AAAAMMDDTHHMMSSZ/} con su \texttt{manifiesto.csv}, que registra el orden, la fase, la duración y el estado de cada corrida, y con la salida de consola de cada programa. Antes de calcular, el script de análisis comprueba que cada corrida tenga 100 latencias con el tamaño y el modo declarados, un único \texttt{run\_id}, RTT positivos y cuatro eventos por envío; si algo no coincide, se detiene. El archivo \texttt{data/SHA256SUMS}, generado con \texttt{analysis/sha256sums.py}, contiene el hash de cada CSV original y permite comprobar que no se modificaron después de las corridas.

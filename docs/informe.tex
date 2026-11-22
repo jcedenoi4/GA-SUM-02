@@ -2,6 +2,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
 \usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
 \usepackage[backend=biber,style=ieee]{biblatex}
 \addbibresource{referencias.bib}
 
@@ -54,6 +55,16 @@ En los 122 pares verificados encontramos que el reloj de cada recepción
 fue mayor que el de su envío. Para comparar TCP y gRPC, necesitamos las
 corridas equivalentes de gRPC y las repeticiones del protocolo experimental
 común.
+
+\section{Protocolo experimental}
+\input{secciones/protocolo_experimental}
+
+\section{Resultados}
+\input{secciones/resultados}
+
+\section{Discusión}
+\input{secciones/discusion_latencia_rendimiento}
+\input{secciones/amenazas_validez}
 
 \printbibliography
 \end{document}

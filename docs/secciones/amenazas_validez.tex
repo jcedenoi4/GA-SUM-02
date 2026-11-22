@@ -1,0 +1,15 @@
+% Aporte de Darwin Joel Sánchez Vera.
+\subsection{Amenazas a la validez}
+\label{sec:amenazas}
+
+Identificamos los siguientes factores que pudieron distorsionar las mediciones:
+
+\begin{itemize}
+\item \textbf{Una sola máquina y sin red física.} Los nodos se comunicaron por la interfaz \texttt{127.0.0.1}, así que el RTT no incluye la latencia de una red real y los procesos compitieron por el mismo procesador. En una red local o en contenedores separados, la diferencia entre ambos mecanismos podría ser otra.
+\item \textbf{Distinta forma de ejecutar los nodos.} TCP ejecutó los tres nodos como hilos de un solo proceso, mientras que gRPC usó tres procesos. En TCP los nodos comparten el bloqueo global del intérprete de Python, lo que afecta sobre todo al modo concurrente. En gRPC cada envío cruza procesos distintos.
+\item \textbf{Rendimiento de gRPC medido con el canal de control.} La duración de una tanda gRPC incluye una llamada de control por cada envío. Por eso el rendimiento de gRPC está subestimado frente al de TCP. El RTT no tiene este problema, porque ambos lo miden en el nodo emisor alrededor de un único intercambio.
+\item \textbf{Ruido del sistema operativo.} Las corridas 22 y 23 de la sesión, ambas de gRPC con 10~KiB, tuvieron medias de RTT de más del doble que las demás repeticiones de su combinación. No registramos la carga de la máquina durante la sesión, por lo que no podemos atribuir esa variación a un programa concreto. El orden rotado de las combinaciones reparte este efecto entre mecanismos, pero no lo elimina.
+\item \textbf{Una sola sesión y un solo equipo.} Las 40 corridas medidas pertenecen a una sesión de unos dos minutos en un equipo con el plan de energía ``Equilibrado''. Incluso dentro de esa sesión, la media de TCP con 10~KiB secuencial varió entre 0,178 y 0,255~ms de una corrida a otra. Los valores absolutos deben leerse como propios de este entorno; otra sesión u otro equipo pueden dar valores distintos.
+\item \textbf{Primer envío de cada corrida.} El calentamiento descarta la primera corrida completa, pero dentro de cada corrida medida el primer envío sigue siendo más lento: en las ocho combinaciones, la mediana del primer envío de las corridas superó a la del resto de envíos. Lo conservamos porque el protocolo no descarta envíos individuales; su peso es de un envío por cada 100.
+\item \textbf{Implementaciones propias.} Comparamos nuestro cliente TCP con JSON y nuestro servicio gRPC con Protocol Buffers, no los mecanismos en abstracto. Otra codificación en TCP o una configuración distinta de gRPC, por ejemplo con flujos o con otro tamaño de grupo de hilos, podría cambiar los resultados.
+\end{itemize}
