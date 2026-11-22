@@ -1,0 +1,21 @@
+\section{Conclusiones}
+
+% Todas las cifras salen de las tablas generadas por los scripts.
+
+\begin{itemize}
+  \item TCP obtuvo menor latencia que gRPC en las cuatro condiciones medidas.
+  Con mensajes de 100~B en modo secuencial, la mediana del RTT de gRPC fue
+  547,6~\% mayor que la de TCP (0,6171~ms frente a 0,0953~ms).
+  \item La diferencia se redujo con mensajes grandes y con concurrencia: con
+  10~KiB en modo concurrente, la mediana de gRPC fue solo 27,9~\% mayor, aunque
+  su percentil~95 siguió siendo 145,4~\% mayor que el de TCP.
+  \item El rendimiento de gRPC fue entre 55,9~\% y 89,6~\% menor que el de TCP,
+  con la salvedad de que la duración de las tandas de gRPC incluye la llamada
+  de control de cada envío.
+  \item La hipótesis se cumplió en la parte de mensajes cortos; con 10~KiB la
+  diferencia bajó, pero TCP mantuvo la menor mediana en todos los casos.
+  \item En los 8\,000 mensajes de las 40 corridas medidas, el reloj de Lamport
+  al recibir fue mayor que al enviar en el 100~\% de los casos, y el script
+  encontró pares de eventos concurrentes con el mismo reloj, lo que confirma
+  que Lamport no basta para detectar la concurrencia.
+\end{itemize}
