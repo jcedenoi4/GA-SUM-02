@@ -161,11 +161,13 @@ def sesion(control, envios, tamano, run_id, modo, concurrente):
             filas.append(un_envio(indice, RUTAS[indice % len(RUTAS)], None))
         return filas
 
-    barrera = Barrier(len(RUTAS), timeout=10)
+    barrera = None
     with ThreadPoolExecutor(max_workers=len(RUTAS)) as grupo:
         for inicio in range(0, envios, len(RUTAS)):
+            lote = RUTAS[:envios - inicio]
+            barrera = Barrier(len(lote), timeout=10)
             trabajos = [grupo.submit(un_envio, inicio + posicion, ruta, barrera)
-                        for posicion, ruta in enumerate(RUTAS)]
+                        for posicion, ruta in enumerate(lote)]
             filas.extend(trabajo.result() for trabajo in trabajos)
     return filas
 
@@ -241,16 +243,16 @@ def main():
                             help="Muestra la salida de los tres nodos")
     args = analizador.parse_args()
 
-    if args.count < 1 or (args.concurrent and args.count % len(RUTAS)):
-        analizador.error("Use un conteo positivo y múltiplo de tres en modo concurrente")
+    if args.count < 1:
+        analizador.error("Use un conteo positivo")
 
     try:
         meta = ejecutar(args.output, args.count, args.size, args.concurrent, args.host, args.verbose)
     except FileExistsError as error:
         analizador.error(str(error))
 
-    print(f"{meta['envios']} intercambios | {meta['tamano_b']} B | {meta['modo']} | "
-          f"{meta['eventos']} eventos | {meta['duracion_s']:.6f} s")
+    print(f"Duración: {meta['duracion_s']:.6f} s | {meta['envios']} intercambios | "
+          f"{meta['tamano_b']} B | {meta['modo']} | {meta['eventos']} eventos")
     print(f"Eventos: {args.output.name}_eventos.csv")
     print(f"Latencias: {args.output.name}_latencias.csv")
 
