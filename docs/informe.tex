@@ -4,6 +4,13 @@
 \usepackage[spanish]{babel}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,columns=fullflexible}
+\usepackage[hidelinks]{hyperref}
 \usepackage[backend=biber,style=ieee]{biblatex}
 \addbibresource{referencias.bib}
 
@@ -13,7 +20,9 @@ Jilmar Jesús Cedeño Intriago\\
 Angello Agustín Mendoza Bermello\\
 Darwin Joel Sánchez Vera\\
 Leonel Leonidas Zambrano Triviño}
-\date{Práctica experimental de la Unidad 1}
+\date{GA-SUM-01 / PE-U1 --- Práctica experimental de la Unidad 1\\
+22 de noviembre de 2026\\
+\url{https://github.com/jcedenoi4/GA-SUM-02}}
 
 \begin{document}
 \maketitle
@@ -30,6 +39,7 @@ el costo de serialización y procesamiento de cada implementación podría
 cambiar la diferencia. Contrastaremos esta hipótesis con la mediana, el
 percentil 95 y el rendimiento en intercambios por segundo.
 
+\input{secciones/arquitectura}
 \section{Implementación}
 \input{secciones/sockets_tcp}
 \input{secciones/grpc}
@@ -44,6 +54,7 @@ percentil 95 y el rendimiento en intercambios por segundo.
 \input{secciones/discusion_latencia_rendimiento}
 \input{secciones/amenazas_validez}
 \input{secciones/aplicacion_pfc_jilmar}
+\input{secciones/verificacion_lamport}
 
 \printbibliography
 \end{document}

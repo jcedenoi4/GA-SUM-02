@@ -1,0 +1,61 @@
+\section{Verificación del reloj de Lamport}
+
+
+\subsection{Método}
+El script \texttt{analysis/verificar\_lamport.py} lee los CSV de eventos reales
+de \texttt{data/} y analiza cada corrida por separado. Cada envío
+(\texttt{send}) se empareja con su recepción (\texttt{receive}) cuando
+coinciden el identificador de corrida (\texttt{run\_id}), el identificador de
+mensaje (\texttt{message\_id}) y el tipo (\texttt{request} o
+\texttt{response}), y el nodo emisor es el par del receptor. En cada par se
+comprueba que $L(\text{recepción}) > L(\text{envío})$.
+
+Para analizar la concurrencia, el script reconstruye la relación
+\emph{ocurrió antes} ($\rightarrow$) definida por Lamport~\cite{lamport1978}:
+dentro de un nodo, cada evento ocurre antes que el siguiente, y el envío de un
+mensaje ocurre antes que su recepción. Dos eventos $a$ y $b$ son concurrentes
+($a \parallel b$) si no se cumple $a \rightarrow b$ ni $b \rightarrow a$.
+
+\subsection{Resultados}
+La Tabla~\ref{tab:lamport} resume las 40 corridas medidas de la sesión
+oficial. La columna \emph{Mensajes} cuenta por separado la solicitud y la
+respuesta de cada envío, por lo que cada corrida de 100 envíos aporta 200
+mensajes. En todas las combinaciones, el reloj de recepción fue mayor que el
+de envío en todos los mensajes, y no quedó ningún evento sin pareja. El script
+también verifica las corridas de calentamiento y las pruebas previas; sus
+resultados quedan en \texttt{analysis/resultados/lamport\_por\_archivo.csv}.
+
+\begin{table}[ht]
+\centering
+\caption{Verificación de Lamport en la sesión oficial (generada por el script).
+\emph{Iguales y conc.}: pares de eventos de nodos distintos con el mismo reloj
+que son concurrentes.}
+\label{tab:lamport}
+\resizebox{\textwidth}{!}{\input{../analysis/resultados/lamport_resumen.tex}}
+\end{table}
+
+\subsection{Eventos concurrentes con el mismo reloj}
+La Tabla~\ref{tab:concurrentes} muestra un ejemplo real por mecanismo y modo.
+En el modo concurrente, nodo-A y nodo-B envían su primera solicitud con
+$L=1$: ninguno había recibido nada, así que ninguno pudo influir en el otro.
+En el modo secuencial, nodo-A recibe la respuesta del mensaje 0001 con $L=4$
+al mismo valor con que nodo-B envía la solicitud 0002, y tampoco existe una
+cadena de mensajes que conecte esos dos eventos.
+
+\begin{table}[ht]
+\centering
+\caption{Ejemplos de eventos concurrentes con igual reloj (generada por el script).}
+\label{tab:concurrentes}
+\resizebox{\textwidth}{!}{\input{../analysis/resultados/lamport_ejemplos.tex}}
+\end{table}
+
+\subsection{Por qué Lamport no distingue este caso}
+El reloj de Lamport solo garantiza la condición
+$a \rightarrow b \Rightarrow L(a) < L(b)$; la implicación inversa no se cumple.
+Por eso, dos relojes iguales indican que los eventos no tienen relación causal,
+pero un reloj menor no indica que un evento haya causado al otro. Los datos lo
+confirman: el script encontró pares de eventos con relojes distintos que también
+son concurrentes (columna \texttt{reloj\_distinto\_concurrentes} de
+\texttt{lamport\_resumen.csv}). Con un solo número por evento no se puede saber
+si dos eventos son concurrentes; para eso se necesitan relojes vectoriales, que
+guardan un contador por cada nodo.

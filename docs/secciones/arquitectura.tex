@@ -1,0 +1,32 @@
+\section{Arquitectura}
+
+El sistema tiene tres nodos, nodo-A, nodo-B y nodo-C, que se comunican en
+\texttt{localhost} por los puertos 5000, 5001 y 5002. Cada nodo mantiene su
+propio reloj lógico de Lamport y actúa a la vez como cliente y como servidor.
+Los mensajes siguen el recorrido circular
+nodo-A $\rightarrow$ nodo-B $\rightarrow$ nodo-C $\rightarrow$ nodo-A, y cada
+solicitud (\texttt{request}) recibe una respuesta (\texttt{response}).
+La Figura~\ref{fig:arquitectura} muestra la arquitectura.
+
+Los dos mecanismos usan la misma topología, pero se ejecutan de forma distinta.
+En TCP los tres nodos son servidores en hilos dentro de un mismo proceso y
+los mensajes viajan como JSON. En gRPC cada nodo es un proceso independiente
+y los mensajes se codifican con el contrato \texttt{proto/lamport.proto}, que
+se describe en la sección de implementación.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  nodo/.style={draw, rounded corners, minimum width=3.2cm, minimum height=1.6cm, align=center, fill=blue!5},
+  flecha/.style={{Latex[length=2.5mm]}-{Latex[length=2.5mm]}, thick}]
+\node[nodo] (A) {\textbf{nodo-A}\\puerto 5000\\reloj $L_A$};
+\node[nodo, below right=2.4cm and 1.6cm of A] (B) {\textbf{nodo-B}\\puerto 5001\\reloj $L_B$};
+\node[nodo, below left=2.4cm and 1.6cm of A] (C) {\textbf{nodo-C}\\puerto 5002\\reloj $L_C$};
+\draw[flecha] (A) -- node[above right, font=\small, align=left] {1. request\\2. response} (B);
+\draw[flecha] (B) -- node[below, font=\small] {1. request / 2. response} (C);
+\draw[flecha] (C) -- node[above left, font=\small, align=right] {1. request\\2. response} (A);
+\end{tikzpicture}
+\caption{Tres nodos con reloj de Lamport. En cada enlace, el primer nodo envía la solicitud y el segundo responde (A$\to$B, B$\to$C, C$\to$A). El mismo recorrido se implementa con
+sockets TCP (mensajes JSON) y con gRPC (Protocol Buffers).}
+\label{fig:arquitectura}
+\end{figure}
