@@ -10,7 +10,7 @@ Práctica experimental de la Unidad 1 (GA-SUM-02 / PE-U1), equipo CMSZ.
 | Darwin Joel Sánchez Vera | [DarwinDevCode](https://github.com/Amendozab5/GA-SUM-02/commits?author=DarwinDevCode) |
 | Leonel Leonidas Zambrano Triviño | [lzambranot6-sys](https://github.com/Amendozab5/GA-SUM-02/commits?author=lzambranot6-sys) |
 
-**Video de respaldo:** https://youtu.be/6JPvw8qsWWo
+**Video de respaldo:** https://youtu.be/oyrgE8kJAPk
 
 ## Estructura
 
