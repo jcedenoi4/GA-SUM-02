@@ -1,7 +1,7 @@
 # GA-SUM-02
 
 Comunicación entre procesos distribuidos con sockets TCP y gRPC.
-Práctica experimental de la Unidad 1 (GA-SUM-01 / PE-U1), equipo CMSZ.
+Práctica experimental de la Unidad 1 (GA-SUM-02 / PE-U1), equipo CMSZ.
 
 | Integrante | Usuario de GitHub |
 |---|---|

@@ -1,6 +1,6 @@
 # Bitácora del equipo
 
-**Actividad:** GA-SUM-01 / PE-U1 · Práctica experimental de la Unidad 1
+**Actividad:** GA-SUM-02 / PE-U1 · Práctica experimental de la Unidad 1
 **Equipo:** CMSZ · **Repositorio:** https://github.com/jcedenoi4/GA-SUM-02
 
 Este registro recoge las sesiones de trabajo, lo realizado en cada una, los
