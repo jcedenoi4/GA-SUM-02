@@ -10,7 +10,7 @@ Práctica experimental de la Unidad 1 (GA-SUM-01 / PE-U1), equipo CMSZ.
 | Darwin Joel Sánchez Vera | [DarwinDevCode](https://github.com/Amendozab5/GA-SUM-02/commits?author=DarwinDevCode) |
 | Leonel Leonidas Zambrano Triviño | [lzambranot6-sys](https://github.com/Amendozab5/GA-SUM-02/commits?author=lzambranot6-sys) |
 
-**Video de respaldo:** PENDIENTE_ENLACE_DEL_VIDEO
+**Video de respaldo:** https://youtu.be/6JPvw8qsWWo
 
 ## Estructura
 
@@ -65,6 +65,14 @@ python analysis\sha256sums.py --verificar
 - `estadisticas.py` genera las tablas y gráficos de latencia y rendimiento en `analysis/resultados/`.
 - `verificar_lamport.py` lee todos los CSV de eventos de `data/` (no los modifica), comprueba que en cada mensaje el reloj de recepción sea mayor que el de envío y busca eventos concurrentes con el mismo reloj. Deja `lamport_resumen.*`, `lamport_ejemplos.*`, `lamport_por_archivo.csv` y `lamport_pares.csv` en `analysis/resultados/`. Termina con código 0 si todo cumple.
 - `sha256sums.py --verificar` comprueba que los CSV no cambiaron desde que se generaron.
+
+## Evidencias
+
+- `docs/evidencias/` reúne las capturas de ejecución de los cuatro integrantes.
+- `docs/evidencias/demostracion_video/` contiene las capturas de la grabación del
+  video de respaldo, con sus CSV en `data/demo_nodo-*.csv`.
+- `docs/evidencias/referencias/` contiene el fragmento subrayado de cada
+  referencia usada en el apartado de gRPC.
 
 ## Compilar el informe
 
